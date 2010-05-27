@@ -41,4 +41,9 @@ describe Rubyist do
     subject { Rubyist.make(:twitter_user_id => 1234).twitter_account }
     its(:user_id) { should == 1234 }
   end
+
+  context 'username に空白文字を含んでいる' do
+    subject { Rubyist.make_unsaved(:username => 'hoge fuga').tap(&:valid?) }
+    its(:errors) { should be_invalid(:username) }
+  end
 end

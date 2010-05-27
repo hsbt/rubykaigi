@@ -4,7 +4,7 @@ class Rubyist < ActiveRecord::Base
   has_many :contributions
 
   validates_uniqueness_of :username
-  validates_format_of :username, :with => /[\w-]+/
+  validates_format_of :username, :with => /^[\w-]+$/
   validates_exclusion_of :username, :in => %w(new edit)
 
   validates_format_of :website, :with => URI.regexp(%w(http https)), :allow_blank => true
