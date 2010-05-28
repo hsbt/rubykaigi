@@ -1,5 +1,5 @@
 Haml::Template.options.update(
-  :format      => :html5,
+  :format      => :xhtml,
   :escape_html => true
 )
 
