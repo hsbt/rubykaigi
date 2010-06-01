@@ -23,7 +23,7 @@
   %body
     %div#header
       %a{ :href => "/2010/#{current_locale}/"}
-        %img{ :alt => "RubyKaigi2010", :src => "/2010/images/top_logo.jpg" }
+        %img.f_left{ :alt => "RubyKaigi2010", :src => "/2010/images/top_logo.jpg" }
       - if authenticated?
         %div#account
           %ul
@@ -47,7 +47,7 @@
               %li
                 %a{ :href => "/2010/#{current_locale}/Registration" }
                   #{t(:tickets)}
-            %li
+            %li.current
               %a{ :href => "/2010/#{current_locale}/Sponsors" }
                 #{t(:sponsors)}
               %ul
@@ -73,7 +73,7 @@
               %li
                 %a{ :href => "#" }
                   #{t(:press)}
-            %li
+            %li.current
               %a
                 #{t(:rubykaigi_archives)}
               %ul
