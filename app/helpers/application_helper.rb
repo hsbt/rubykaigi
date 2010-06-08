@@ -31,4 +31,12 @@ module ApplicationHelper
     datetime = RubyKaigi.latest.registration_open_at
     !!datetime.try(:past?)
   end
+
+  def rubykaigi_org_feed_url(locale)
+    if locale.to_sym == :ja
+      "http://pipes.yahoo.com/pipes/pipe.run?_id=6eb380c6cbaddc688d8d2f4599ead952&_render=rss"
+    else
+      "http://pipes.yahoo.com/pipes/pipe.run?_id=050be76c02065f46170d82dca2abfe84&_render=rss"
+    end
+  end
 end

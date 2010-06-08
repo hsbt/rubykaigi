@@ -7,10 +7,7 @@
     %link{ :href => "/2010/stylesheets/common.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
     %link{ :href => "/2010/stylesheets/superfish.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
     %link{ :href => "/2010/stylesheets/form_flash.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
-    - if current_locale == 'ja'
-      %link{ :rel => "alternate", :type => "application/rss+xml", :title => "RubyKaigi2010 in Japanese", :href => "http://pipes.yahoo.com/pipes/pipe.run?_id=6eb380c6cbaddc688d8d2f4599ead952&_render=rss" }
-    - else
-      %link{ :rel => "alternate", :type => "application/rss+xml", :title => "RubyKaigi2010 in English", :href => "http://pipes.yahoo.com/pipes/pipe.run?_id=050be76c02065f46170d82dca2abfe84&_render=rss" }
+    %link{ :rel => "alternate", :type => "application/rss+xml", :title => "RubyKaigi2010(#{t(current_locale)})", :href => rubykaigi_org_feed_url(current_locale) }
     %script{ :src => "/2010/javascripts/jquery-1.2.6.min.js", :type => "text/javascript" }
     %script{ :src => "/2010/javascripts/hoverIntent.js", :type => "text/javascript" }
     %script{ :src => "/2010/javascripts/superfish.js", :type => "text/javascript" }

@@ -17,7 +17,7 @@ class PagesController < LocaleBaseController
       @headlines = HeadlineEntry.recent(I18n.locale, 5)
       page = params[:page_name].blank? ? 'index' : params[:page_name]
       respond_to do |f|
-        f.html { render :template => "pages/#{params[:year]}/#{params[:locale]}/#{page}" }
+        f.html { render :template => File.join('pages', params[:year], page) }
       end
       return
     end
