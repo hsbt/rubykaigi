@@ -23,11 +23,12 @@
         %img.f_left{ :alt => "RubyKaigi2010", :src => "/2010/images/top_logo.jpg" }
       - if authenticated?
         %div#account
-          %ul
-            %li!= link_to 'Dashboard', dashboard_path
-            %li!= link_to 'Your Cart', carts_path
-            %li!= link_to 'Account Settings', edit_account_path
-            %li!= link_to 'Sign Out', sessions_path, :method => :delete
+          %div
+            %p Welcome, #{user.username} 
+            %ul
+              %li!= link_to 'Dashboard', dashboard_path
+              %li!= link_to 'Account Settings', edit_account_path
+              %li!= link_to 'Sign Out', sessions_path, :method => :delete
           %img.icon{ :alt => "Avator", :title => "Avator Icon Setting Feature is coming soon :<", :src => '/images/bow_face.png', :height => 30 }
       - else
         != link_to(image_tag("/2010/images/signin_btn.png", :alt => 'Sign In', :class => 'f_right'), new_sessions_path)
