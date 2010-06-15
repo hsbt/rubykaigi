@@ -5,6 +5,10 @@
   %p
     != link_to rubyist_url(user), rubyist_path(user)
 
+  %h2 Your Ticket(s) Information
+  %ul
+    %li!= link_to_if(user.has_ticket?(2010), 'Show Ticket(s) for RubyKaigi 2010', tickets_path)
+
   %h2 Your Contribution to RubyKaigi 2010
   %ul
     - if user.contributions.present?
@@ -21,9 +25,7 @@
 
   %h2 RubyKaigi Related Actions
   %ul
-    %li!= link_to_if(user.has_ticket?(2010), 'Show Ticket(s) for RubyKaigi 2010', tickets_path)
     %li!= link_to 'Show Your Cart', carts_path
-    %li!= link_to 'Studen Discount Program Entry Form', 'https://spreadsheets.google.com/viewform?formkey=dEpJSldhXzV6Skp6d0RxQVdWQS1Odnc6MQ'
     %li Order History (Coming Soon :-&lt;)
 
   %h2 Account Related Actions
