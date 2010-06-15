@@ -27,17 +27,34 @@ describe SessionsController do
   describe 'GET /unauthenticated' do
     context 'redirect back from Twitter with credentials' do
       before do
-        stub(token = Object.new).params { {:user_id => 1234} }
+        stub(token = Object.new) {
+          token  { 'alpha' }
+          secret { 'bravo' }
+          params { {:user_id => 1234} }
+        }
 
         stub(controller).warden.stub!.env {
           {'warden.options' => {:oauth => {:twitter => {:access_token => token}}}}
+        }
+
+        stub.instance_of(Twitter::Base).user {
+          Hashie::Mash.new(
+            :name              => 'Keita Urashima',
+            :url               => 'http://ursm.jp/',
+            :screen_name       => 'ursm',
+            :profile_image_url => 'http://example.com/ursm.png'
+          )
         }
 
         get :unauthenticated
       end
 
       it { response.should redirect_to(new_account_path) }
-      it { session[:credentials][:twitter_user_id].should == 1234 }
+      it { session[:params_from_authenticator][:twitter_user_id].should == 1234 }
+      it { session[:params_from_authenticator][:full_name].should == 'Keita Urashima' }
+      it { session[:params_from_authenticator][:website].should == 'http://ursm.jp/' }
+      it { session[:params_from_authenticator][:avatar_type].should == 'twitter' }
+      it { Redis::Value.new('twitter/users/1234', Redis::Objects.redis, :marshal => true).value.keys.should =~ %w(screen_name profile_image_url) }
     end
 
     context 'redirect back from OpenID provider with credentials' do
@@ -52,7 +69,7 @@ describe SessionsController do
       end
 
       it { response.should redirect_to(new_account_path) }
-      it { session[:credentials][:identity_url].should == 'http://ursm.jp/' }
+      it { session[:params_from_authenticator][:identity_url].should == 'http://ursm.jp/' }
     end
 
     context 'authentication failed' do

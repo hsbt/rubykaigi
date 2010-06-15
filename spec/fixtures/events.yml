@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title_en: MyString
+  title_ja: MyString
+  abstract_en: MyString
+  abstract_ja: MyString
+  detail_en: MyString
+  detail_ja: MyString
+  additional_info: MyString
+  lang: MyString
+  required_equipment: MyString
+  parent_event_id: 1
+  break: false
+
+two:
+  title_en: MyString
+  title_ja: MyString
+  abstract_en: MyString
+  abstract_ja: MyString
+  detail_en: MyString
+  detail_ja: MyString
+  additional_info: MyString
+  lang: MyString
+  required_equipment: MyString
+  parent_event_id: 1
+  break: false

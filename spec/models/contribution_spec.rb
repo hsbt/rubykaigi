@@ -2,21 +2,30 @@
 require 'spec_helper'
 
 describe Contribution do
-  describe "#from_order" do
+  def setup_shared_contribution_context
+    @kakutani = Rubyist.make(:username => 'kakutani')
+
+    @rk10_registration = ProductItem.make(
+      :item_code => "rk10",
+      :ruby_kaigi => RubyKaigi._2010,
+      :unit_price => 6000,
+      :stock => 20)
+    @rk10_party = ProductItem.make(
+      :item_code => "rk10_party",
+      :ruby_kaigi => RubyKaigi._2010,
+      :unit_price => 5000,
+      :stock => 10)
+    @individual_sponsor = ProductItem.make(
+      :item_code => "rk10_individual_sponsor",
+      :ruby_kaigi => RubyKaigi._2010,
+      :stock => 5)
+
+    stub(Ticket).build_from_contrib(anything) { nil }
+  end
+
+  describe "#from_order", ' with Individual Sponsor' do
     before do
-      @rk10_registration = ProductItem.make(
-        :item_code => "rk10",
-        :ruby_kaigi => RubyKaigi._2010,
-        :stock => 20)
-      @rk10_party = ProductItem.make(
-        :item_code => "rk10_party",
-        :ruby_kaigi => RubyKaigi._2010,
-        :stock => 10)
-      @kakutani = Rubyist.make(:username => 'kakutani')
-      @individual_sponsor = ProductItem.make(
-        :item_code => "rk10_individual_sponsor",
-        :ruby_kaigi => RubyKaigi._2010,
-        :stock => 5)
+      setup_shared_contribution_context
       @sponsor_option = IndividualSponsorOption.make_unsaved(
         :additional_amount => 0,
         :link_label => 'kakutani',
@@ -60,7 +69,7 @@ describe Contribution do
           ProductItem.kaigi(2010).rk10.stock.should == 20
         end
 
-        specify "懇親会チケットの在庫は減っていること" do
+        specify "懇親会チケットの在庫が減っていること" do
           ProductItem.kaigi(2010).rk10_party.stock.should == 9
         end
       end
@@ -144,6 +153,156 @@ describe Contribution do
       end
     end
   end
+
+  describe "#from_order", " with attendee" do
+    context "本編チケットのみ" do
+      before do
+        setup_shared_contribution_context
+        @kaigi = OrderItem.make(
+          :product_item => @rk10_registration,
+          :unit_price => 6000,
+          :quantity => 1)
+        @order = Order.make(
+          :rubyist => @kakutani,
+          :ruby_kaigi => RubyKaigi._2010,
+          :line_items => [@kaigi])
+        stub(@order).completed? { true }
+        Contribution.from_order(@order)
+      end
+
+      subject { @kakutani }
+
+      it { should be_attendee(2010) }
+      it { should_not be_party_attendee(2010) }
+      it { should_not be_individual_sponsor(2010) }
+
+      specify "本編の在庫が1減っていること" do
+        ProductItem.kaigi(2010).rk10.stock.should == 19
+      end
+
+      specify "懇親会の在庫は減っていないこと" do
+        ProductItem.kaigi(2010).rk10_party.stock.should == 10
+      end
+
+      specify "個人スポンサーの在庫は減っていないこと" do
+        ProductItem.kaigi(2010).rk10_individual_sponsor.stock.should == 5
+      end
+    end
+
+    context "懇親会のみ" do
+      before do
+        setup_shared_contribution_context
+        @kaigi = OrderItem.make(
+          :product_item => @rk10_registration,
+          :unit_price => 6000,
+          :quantity => 1)
+        @party = OrderItem.make(
+          :product_item => @rk10_party,
+          :unit_price => 5000,
+          :quantity => 1)
+        @order = Order.make(
+          :rubyist => @kakutani,
+          :ruby_kaigi => RubyKaigi._2010,
+          :line_items => [@kaigi, @party])
+        stub(@order).completed? { true }
+        Contribution.from_order(@order)
+      end
+
+      subject { @kakutani }
+
+      it { should be_attendee(2010) }
+      it { should be_party_attendee(2010) }
+      it { should_not be_individual_sponsor(2010) }
+
+      specify "本編の在庫が1減っていること" do
+        ProductItem.kaigi(2010).rk10.stock.should == 19
+      end
+
+      specify "懇親会の在庫が1減っていること" do
+        ProductItem.kaigi(2010).rk10_party.stock.should == 9
+      end
+
+      specify "個人スポンサーの在庫は減っていないこと" do
+        ProductItem.kaigi(2010).rk10_individual_sponsor.stock.should == 5
+      end
+    end
+
+    context "本編と懇親会(1つずつ)" do
+      before do
+        setup_shared_contribution_context
+        @party = OrderItem.make(
+          :product_item => @rk10_party,
+          :unit_price => 5000,
+          :quantity => 1)
+        @kaigi = OrderItem.make(
+          :product_item => @rk10_registration,
+          :unit_price => 6000,
+          :quantity => 1)
+        @order = Order.make(
+          :rubyist => @kakutani,
+          :ruby_kaigi => RubyKaigi._2010,
+          :line_items => [@party, @kaigi])
+        stub(@order).completed? { true }
+        Contribution.from_order(@order)
+      end
+
+      subject { @kakutani }
+
+      it { should be_attendee(2010) }
+      it { should be_party_attendee(2010) }
+      it { should_not be_individual_sponsor(2010) }
+
+      specify "本編の在庫が1減っていること" do
+        ProductItem.kaigi(2010).rk10.stock.should == 19
+      end
+
+      specify "懇親会の在庫が1減っていること" do
+        ProductItem.kaigi(2010).rk10_party.stock.should == 9
+      end
+
+      specify "個人スポンサーの在庫は減っていないこと" do
+        ProductItem.kaigi(2010).rk10_individual_sponsor.stock.should == 5
+      end
+    end
+
+    context "本編と懇親会(nずつ)" do
+      before do
+        setup_shared_contribution_context
+        @kaigi = OrderItem.make(
+          :product_item => @rk10_registration,
+          :unit_price => 6000,
+          :quantity => 4)
+        @party = OrderItem.make(
+          :product_item => @rk10_party,
+          :unit_price => 5000,
+          :quantity => 3)
+        @order = Order.make(
+          :rubyist => @kakutani,
+          :ruby_kaigi => RubyKaigi._2010,
+          :line_items => [@party, @kaigi])
+        stub(@order).completed? { true }
+        Contribution.from_order(@order)
+      end
+
+      subject { @kakutani }
+
+      it { should be_attendee(2010) }
+      it { should be_party_attendee(2010) }
+      it { should_not be_individual_sponsor(2010) }
+
+      specify "本編の在庫が4減っていること" do
+        ProductItem.kaigi(2010).rk10.stock.should == 16
+      end
+
+      specify "懇親会の在庫が3減っていること" do
+        ProductItem.kaigi(2010).rk10_party.stock.should == 7
+      end
+
+      specify "個人スポンサーの在庫は減っていないこと" do
+        ProductItem.kaigi(2010).rk10_individual_sponsor.stock.should == 5
+      end
+    end
+  end
 end
 
 describe Contribution do
@@ -155,7 +314,7 @@ describe Contribution do
 
     it { should_not be_staff(2010) }
 
-    context "Contributionが正常に作成した場合" do
+    context "Contributionを正常に作成できた場合" do
       before do
         Contribution.authorize_as_staff(@kakutani, 2010)
       end

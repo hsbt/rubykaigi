@@ -1,20 +1,40 @@
 #content
   %h1 #{user.username}'s cart
 
-  - if @cart.empty?
-    (your cart is empty!)
-  - else
+  - unless @cart.empty?
     - form_for @cart do |f|
       - @cart.items.each do |item|
         - if item.individual_sponsor?
-          %h2
-            #{t(item.label)}
+          %h2 #{t(item.label)}
           %p
             #{t('amount')}: #{number_with_delimiter(item.unit_price)}
             JPY + #{t('additional_amount_label')}<br />
+            #{t('quantity')}: #{number_with_delimiter(item.quantity)}<br />
             != link_to("[#{t('delete_this_item')}]", remove_item_carts_path(:product_item_code => item.item_code), :method => :delete)
-      -# != f.submit 'Update Cart'
-    <br/>
-    <br/>
+        - else
+          %h2 #{t(item.label)}
+          %p
+            #{t('amount')}: #{number_with_delimiter(item.unit_price)} JPY<br />
+            #{t('quantity')}:
+            #{item.quantity}
+            /
+              != text_field_tag "qty[#{item.item_code}]", item.quantity, :size => 2, :style => 'text-align:right;'
+              != f.submit 'Update Cart'
+              <br />(#{t('notice_max_quantity')})<br />
+            <br />
+            != link_to("[#{t('delete_this_item')}]", remove_item_carts_path(:product_item_code => item.item_code), :method => :delete)
+      <br/>
+      <br/>
+      %p
+        != link_to 'Back to Registration', registrations_path(:year => RubyKaigi.latest_year, :locale => current_locale)
+
     %p.procedd_to_checkout{:style => 'text-align:right'}
       != proceed_to_checkout_button
+      -# <br />(When you are changed quantity, you need to update cart via "Update Cart" button before "Proceed To CheckOut")
+  - else
+    %p
+      (your cart is empty!)
+    <br/>
+    <br/>
+    %p
+      != link_to 'Back to Registration', registrations_path(:year => RubyKaigi.latest_year, :locale => current_locale)

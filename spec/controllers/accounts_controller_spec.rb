@@ -4,7 +4,7 @@ describe AccountsController do
   describe 'GET /account/new' do
     context 'with Twitter credentials' do
       before do
-        session[:credentials] = {:twitter_user_id => 4567}
+        session[:params_from_authenticator] = {:twitter_user_id => 4567}
         get :new
       end
 
@@ -13,7 +13,7 @@ describe AccountsController do
 
     context 'with OpenID credentials' do
       before do
-        session[:credentials] = {:identity_url => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:identity_url => 'http://ursm.jp/'}
         get :new
       end
 
@@ -37,7 +37,7 @@ describe AccountsController do
         post :create, :rubyist => Rubyist.plan
       end
 
-      it { session[:credentials].should be_nil }
+      it { session[:params_from_authenticator].should be_nil }
     end
 
     shared_examples_for 'Signed up successfully without return_to' do
@@ -68,7 +68,7 @@ describe AccountsController do
 
     context 'with Twitter credentials' do
       before do
-        session[:credentials] = {:twitter_user_id => 4567}
+        session[:params_from_authenticator] = {:twitter_user_id => 4567}
       end
 
       context 'saved' do
@@ -83,13 +83,13 @@ describe AccountsController do
 
       context 'failed' do
         it_should_behave_like 'Signed up failed'
-        it { session[:credentials][:twitter_user_id].should == 4567 }
+        it { session[:params_from_authenticator][:twitter_user_id].should == 4567 }
       end
     end
 
     context 'with OpenID credentials' do
       before do
-        session[:credentials] = {:identity_url => 'http://ursm.jp/'}
+        session[:params_from_authenticator] = {:identity_url => 'http://ursm.jp/'}
       end
 
       context 'saved' do
@@ -104,7 +104,7 @@ describe AccountsController do
 
       context 'failed' do
         it_should_behave_like 'Signed up failed'
-        it { session[:credentials][:identity_url].should == 'http://ursm.jp/' }
+        it { session[:params_from_authenticator][:identity_url].should == 'http://ursm.jp/' }
       end
     end
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class PaypalController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:instant_payment_notification]
 
@@ -23,6 +24,7 @@ class PaypalController < ApplicationController
       return
     end
 
+# FIXME Order#priceのバグのため、個人スポンサー販売時にはこの数値が合ってなかった。削るか復活させるかはもうちょっとテストを書けるかどうかで判断したいので、いまはコメントアウトしてる(kakutani)
 #    unless (params[:mc_gross] == order.price.to_s && params[:mc_currency] == "JPY")
 #      render :nothing => true, :status => 400
 #      return
@@ -35,7 +37,7 @@ class PaypalController < ApplicationController
       order.save!
     end
 
-    Delayed::Job.enqueue Paypal::HandlePaymentNotificationJob.new(order.id)
+    Delayed::Job.enqueue(Paypal::HandlePaymentNotificationJob.new(order.id))
     render :nothing => true, :status => 200
   end
 end

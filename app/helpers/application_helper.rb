@@ -39,4 +39,8 @@ module ApplicationHelper
       "http://pipes.yahoo.com/pipes/pipe.run?_id=050be76c02065f46170d82dca2abfe84&_render=rss"
     end
   end
+
+  def noindex_nofollow
+    '<meta name="robots" content="noindex,nofollow" />'
+  end
 end

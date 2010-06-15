@@ -22,7 +22,7 @@ describe Cart do
       @product2 = ProductItem.make(:unit_price => 200)
     end
 
-    context "when single item" do
+    context "1件だけのとき" do
       before(:all) do
         @cart.add_product(@product1)
       end
@@ -33,7 +33,7 @@ describe Cart do
       it { should_not be_empty }
     end
 
-    context "when multiple items" do
+    context "複数のアイテムがある場合" do
       before(:all) do
         @cart.add_product(@product1)
         @cart.add_product(@product1)

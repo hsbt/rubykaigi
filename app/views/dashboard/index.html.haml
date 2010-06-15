@@ -9,19 +9,22 @@
   %ul
     - if user.contributions.present?
       - if user.individual_sponsor?(2010)
-        %li [Individual Sponsor (#{number_with_delimiter(user.individual_sponsor.amount)} JPY)]
+        %li [Individual Sponsor] (#{number_with_delimiter(user.individual_sponsor.amount)} JPY)
       - if user.staff?(2010)
         %li [Staff]
+      - if user.attendee?(2010)
+        %li [Attendee]
       - if user.party_attendee?(2010)
         %li [Official Conference Party Attendee]
     - else
-      %li (Not Yet)
+      %li (Nothing)
 
   %h2 RubyKaigi Related Actions
   %ul
-    %li Show Ticket(s) for RubyKaigi 2010 (Coming Soon :-&lt;)
+    %li!= link_to_if(user.has_ticket?(2010), 'Show Ticket(s) for RubyKaigi 2010', tickets_path)
+    %li!= link_to 'Show Your Cart', carts_path
+    %li!= link_to 'Studen Discount Program Entry Form', 'https://spreadsheets.google.com/viewform?formkey=dEpJSldhXzV6Skp6d0RxQVdWQS1Odnc6MQ'
     %li Order History (Coming Soon :-&lt;)
-    %li!= link_to 'Your Cart', carts_path
 
   %h2 Account Related Actions
   %ul

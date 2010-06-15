@@ -23,8 +23,10 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
   Rubyist.find_by_twitter_user_id(access_token.params[:user_id])
 end
 
-Warden::OpenID.user_finder do |response|
-  Rubyist.find_by_identity_url(response.identity_url)
+Warden::OpenID.configure do |config|
+  config.user_finder do |response|
+    Rubyist.find_by_identity_url(response.identity_url)
+  end
 end
 
 # monkey patch for rewrite callback URI.

@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 class Cart
+  class OverProductItemLimitationError < StandardError;  end
   attr_reader :items
 
   def initialize
     @items = []
   end
 
-  def add_product(product)
+  def add_product(product, qty = nil)
     current_item = @items.find {|item| item.product_item == product }
     if current_item
-      current_item.increment_quantity unless product.individual_sponsor?
+      if qty == 0
+        remove_product(product)
+#      else
+#        current_item.increment_quantity(qty) unless product.individual_sponsor?
+      end
     else
       current_item = CartItem.new(product)
       @items << current_item

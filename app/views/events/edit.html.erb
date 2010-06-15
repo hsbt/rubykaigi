@@ -1,0 +1,56 @@
+<h1>Editing event</h1>
+
+<% form_for(@event) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :title_en %><br />
+    <%= f.text_field :title_en %>
+  </p>
+  <p>
+    <%= f.label :title_ja %><br />
+    <%= f.text_field :title_ja %>
+  </p>
+  <p>
+    <%= f.label :abstract_en %><br />
+    <%= f.text_field :abstract_en %>
+  </p>
+  <p>
+    <%= f.label :abstract_ja %><br />
+    <%= f.text_field :abstract_ja %>
+  </p>
+  <p>
+    <%= f.label :detail_en %><br />
+    <%= f.text_field :detail_en %>
+  </p>
+  <p>
+    <%= f.label :detail_ja %><br />
+    <%= f.text_field :detail_ja %>
+  </p>
+  <p>
+    <%= f.label :additional_info %><br />
+    <%= f.text_field :additional_info %>
+  </p>
+  <p>
+    <%= f.label :lang %><br />
+    <%= f.text_field :lang %>
+  </p>
+  <p>
+    <%= f.label :required_equipment %><br />
+    <%= f.text_field :required_equipment %>
+  </p>
+  <p>
+    <%= f.label :parent_event_id %><br />
+    <%= f.text_field :parent_event_id %>
+  </p>
+  <p>
+    <%= f.label :break %><br />
+    <%= f.check_box :break %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @event %> |
+<%= link_to 'Back', events_path %>

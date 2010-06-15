@@ -1,0 +1,30 @@
+-content_for :meta_top do
+  !=noindex_nofollow
+#content
+  %h1 RubyKaigi #{@ticket.ruby_kaigi.year}, #{t(@ticket.ticket_type)}
+
+  %h2 Ticket Code
+  %p #{@ticket.ticket_code}
+
+  %h2 Ticket Type
+  %p #{t(@ticket.ticket_type)}
+
+  %h2 Your Name
+  %p #{@ticket.name}
+
+  %p{:style => 'text-align:right'}!= link_to 'Edit', edit_ticket_path(@ticket)
+
+  %h2 Your Email
+  %p #{@ticket.email}
+
+  %p{:style => 'text-align:right'}!= link_to 'Edit', edit_ticket_path(@ticket)
+
+  %h2 Permalink
+  %p{:style=>'font-size:12px'}!= link_to ticket_url(@ticket), ticket_path(@ticket)
+  %p (Anybody can see this page via permalink)
+  %p{:style => 'text-align:right'}!= link_to('Regenerate Permalink', regenerate_permalink_ticket_path(@ticket), :method => :put)
+
+  <br />
+  <br />
+  <br />
+  %p!= link_to 'Back to My Tickets', tickets_path

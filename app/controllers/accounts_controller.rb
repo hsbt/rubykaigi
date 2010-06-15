@@ -1,28 +1,22 @@
 class AccountsController < ApplicationController
-  verify :session => :credentials, :only => %w(new create), :redirect_to => :new_sessions_path
+  verify :session => :params_from_authenticator, :only => %w(new create), :redirect_to => :new_sessions_path
 
   layout_for_latest_ruby_kaigi
 
   def new
-    @rubyist = Rubyist.new.tap {|r|
-      r.twitter_user_id, r.identity_url = session[:credentials].values_at(:twitter_user_id, :identity_url)
-
-      if tw = r.twitter_account
-        r.full_name   = tw.name
-        r.website     = tw.url
-        r.avatar_type = 'twitter'
-      end
-    }
+    @rubyist = Rubyist.new(session[:params_from_authenticator]) do |r|
+      r.twitter_user_id, r.identity_url = session[:params_from_authenticator].values_at(:twitter_user_id, :identity_url)
+    end
   end
 
   def create
     @rubyist = Rubyist.new(params[:rubyist]) do |r|
-      r.twitter_user_id, r.identity_url = session[:credentials].values_at(:twitter_user_id, :identity_url)
+      r.twitter_user_id, r.identity_url = session[:params_from_authenticator].values_at(:twitter_user_id, :identity_url)
     end
 
     if @rubyist.save
       self.user = @rubyist
-      session.delete(:credentials)
+      session.delete(:params_from_authenticator)
 
       redirect_to session.delete(:return_to) || root_path
     else

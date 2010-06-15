@@ -4,4 +4,5 @@ set :output, :standard => Rails.root + 'log/cron.log'
 
 every 1.hour do
   rake 'headline:fetch'
+  rake 'twitter:wash_whale'
 end

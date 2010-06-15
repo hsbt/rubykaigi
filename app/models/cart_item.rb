@@ -15,8 +15,18 @@ class CartItem
     @attend_party = false
   end
 
-  def increment_quantity
-    @quantity += 1
+  def increment_quantity(qty = nil)
+    old_quantity = @quantity
+    unless qty
+      @quantity += 1
+    else
+      @quantity = qty
+    end
+    if 4 < @quantity || (@product_item.stock - @quantity < 0)
+      @quantity = old_quantity
+      raise Cart::OverProductItemLimitationError
+    end
+    @quantity
   end
 
   def unit_price

@@ -9,13 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100526011648) do
-
-  create_table "accounts", :force => true do |t|
-    t.string   "identity_url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20100615054304) do
 
   create_table "contributions", :force => true do |t|
     t.integer  "rubyist_id",        :null => false
@@ -41,11 +35,42 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
-  create_table "exchange_tickets", :force => true do |t|
-    t.integer  "paypal_transaction_id"
-    t.string   "code4u"
+  create_table "event_rooms", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "room_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "event_rubyists", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "rubyist_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_time_slits", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "time_slit_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", :force => true do |t|
+    t.string   "title_en"
+    t.string   "title_ja"
+    t.text     "abstract_en"
+    t.text     "abstract_ja"
+    t.string   "detail_en"
+    t.string   "detail_ja"
+    t.string   "additional_info"
+    t.string   "lang"
+    t.string   "required_equipment"
+    t.integer  "parent_event_id"
+    t.boolean  "break"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "presenter_name"
   end
 
   create_table "headline_entries", :force => true do |t|
@@ -69,43 +94,7 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
     t.integer  "order_item_id",                        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "lightning_talk_selections", :force => true do |t|
-    t.integer  "lightning_talk_submission_id"
-    t.integer  "result",                       :default => -1, :null => false
-    t.integer  "disp_order",                   :default => 0,  :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "lightning_talk_submissions", :force => true do |t|
-    t.text     "name"
-    t.text     "organization"
-    t.text     "email"
-    t.text     "title"
-    t.text     "abstract"
-    t.boolean  "has_ticket"
-    t.text     "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "day1"
-    t.string   "day2"
-  end
-
-  create_table "open_id_authentication_associations", :force => true do |t|
-    t.integer "issued"
-    t.integer "lifetime"
-    t.string  "handle"
-    t.string  "assoc_type"
-    t.binary  "server_url"
-    t.binary  "secret"
-  end
-
-  create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :null => false
-    t.string  "server_url"
-    t.string  "salt",       :null => false
+    t.boolean  "anonymous",         :default => false
   end
 
   create_table "order_items", :force => true do |t|
@@ -123,7 +112,7 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "purchased_at"
-    t.integer  "price",                          :default => 0,     :null => false
+    t.integer  "price",                                             :null => false
     t.integer  "paypal_payment_notification_id"
     t.integer  "ruby_kaigi_id",                  :default => 5,     :null => false
     t.string   "invoice_code",                                      :null => false
@@ -150,23 +139,6 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
     t.string   "invoice"
   end
 
-  create_table "paypal_transactions", :force => true do |t|
-    t.string   "txn_id",            :null => false
-    t.string   "item_number",       :null => false
-    t.string   "payer_email",       :null => false
-    t.string   "last_name",         :null => false
-    t.string   "first_name",        :null => false
-    t.string   "payment_status",    :null => false
-    t.string   "residence_country", :null => false
-    t.string   "verify",            :null => false
-    t.text     "notified_json",     :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "receipt_id"
-    t.string   "payer_id"
-    t.text     "memo"
-  end
-
   create_table "product_items", :force => true do |t|
     t.string   "item_code",                         :null => false
     t.integer  "unit_price",                        :null => false
@@ -180,12 +152,22 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
 
   add_index "product_items", ["item_code"], :name => "index_product_items_on_item_code", :unique => true
 
-  create_table "ruby_kaigis", :force => true do |t|
-    t.integer  "year",                                :null => false
+  create_table "rooms", :force => true do |t|
+    t.string   "name_en"
+    t.string   "name_ja"
+    t.string   "floor_en"
+    t.string   "floor_ja"
+    t.integer  "sort_order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "capacity",             :default => 0, :null => false
-    t.integer  "party_capacity",       :default => 0, :null => false
+  end
+
+  create_table "ruby_kaigis", :force => true do |t|
+    t.integer  "year",                 :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "capacity",             :null => false
+    t.integer  "party_capacity",       :null => false
     t.datetime "registration_open_at"
   end
 
@@ -207,28 +189,24 @@ ActiveRecord::Schema.define(:version => 20100526011648) do
   add_index "rubyists", ["twitter_user_id"], :name => "index_rubyists_on_twitter_user_id", :unique => true
   add_index "rubyists", ["username"], :name => "index_rubyists_on_username", :unique => true
 
-  create_table "talk_descriptions", :force => true do |t|
-    t.text     "title"
-    t.text     "abstract"
-    t.text     "speaker"
-    t.text     "profile"
-    t.string   "locale",     :null => false
-    t.integer  "talk_id"
+  create_table "tickets", :force => true do |t|
+    t.string   "ticket_code",     :null => false
+    t.string   "ticket_type",     :null => false
+    t.string   "code4url",        :null => false
+    t.string   "name",            :null => false
+    t.string   "email",           :null => false
+    t.integer  "contribution_id"
+    t.integer  "rubyist_id"
+    t.integer  "ruby_kaigi_id",   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "talks", :force => true do |t|
-    t.integer  "year"
-    t.string   "room"
+  create_table "time_slits", :force => true do |t|
     t.datetime "start_at"
     t.datetime "end_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "code"
-    t.string   "email",           :null => false
-    t.text     "nicovideo_links"
-    t.string   "material_link"
   end
 
 end

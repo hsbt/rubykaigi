@@ -1,0 +1,6 @@
+- if event
+  - content_tag :td, :rowspan => event.minutes / 30, :class => event.break? ? 'break' : nil do
+    != render event
+- elsif room.empty_at?(from)
+  %td.empty
+    & -

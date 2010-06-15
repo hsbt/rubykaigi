@@ -1,0 +1,9 @@
+%tr
+  %th
+    != "#{l from, :format => :hhmm} - #{l 30.minutes.since(from), :format => :hhmm}"
+  - if (events_per_from.count == 1) && (event = events_per_from.first).break?
+    %td.break{ :colspan => @rooms.count}
+      = event.title
+  - else
+    - @rooms.each do |room|
+      != render 'room', :from => from, :room => room, :event => events_per_from.detect {|e| (e.room == room) && (e.from == from)}

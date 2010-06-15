@@ -4,12 +4,47 @@
 
   - unless authenticated?
     %p!= render :partial => 'need_login'
+  - else
+    %p!= link_to 'Show Your Cart', carts_path
+
+  %h2 #{t('product_item.rk10')}
+
+  %p.price
+    <strong>#{number_with_delimiter(@kaigi.unit_price)} JPY</strong>
+    != stock_notification(@kaigi)
+  %p
+    3 days pass
+  %p
+    #{t('student_discount_program_detail')}:
+    (
+    != link_to 'English', 'http://rubykaigi.tdiary.net/20100614.html#p02'
+    ),(
+    != link_to '日本語', 'http://rubykaigi.tdiary.net/20100614.html#p01'
+    )
+  %p
+    != link_to_if(@kaigi.now_on_sale?, t('student_discount_program_entry_form'), 'https://spreadsheets.google.com/viewform?formkey=dEpJSldhXzV6Skp6d0RxQVdWQS1Odnc6MQ')
+    - unless @kaigi.now_on_sale?
+      (In Preparation)
+
+  != render :partial => 'add_to_cart', :locals => {:item => @kaigi}
+
+  %h2 #{t('product_item.rk10_party')}
+
+  %p.price
+    <strong>#{number_with_delimiter(@party.unit_price)} JPY</strong>
+    != stock_notification(@party)
+  %p
+    Start at 2010-08-28(Sat) 19:00 JST on the same location as RubyKaigi 2010.
+  %p
+    (We don't have <strong>any student discount</strong> for Conference Party.)
+
+  != render :partial => 'add_to_cart', :locals => {:item => @party}
 
   %h2 #{t('product_item.rk10_individual_sponsor')}
 
   %p.price
     #{number_with_delimiter(@individual_sponsor.unit_price)} JPY + #{t('additional_amount_label')}
-
+    != stock_notification(@individual_sponsor)
   %p
     #{t('individual_sponsor_detail')}:
     (
@@ -18,19 +53,4 @@
     != link_to '日本語', 'http://rubykaigi.tdiary.net/20100507.html#p02'
     )
 
-  %p.add_to_cart{:style => 'text-align:right'}
-    - addtocart_button = (current_locale == "ja" ? image_tag("/2010/images/addtocart_ja.png", :alt => "カートへ入れる") : image_tag("/2010/images/addtocart_en.png", :alt => "Add To Cart"))
-    - if @individual_sponsor.now_on_sale?
-      != link_to(addtocart_button, add_item_carts_path(:product_item_code => @individual_sponsor.item_code), :method => :post, :class => 'noborder')
-    - else
-      %span{:style => 'font-size: 24px;font-weight:bold'}
-        [Sold Out]
-      <br /><span style="font-size:12px;">(We're now discussing this form will re-open or not.)</span>
-
-  %h2 #{t('product_item.rk10')}
-
-  %p (#{t('in_preparation')}. #{t('normal_registartion_open_notification')})
-
-  %h2 #{t('product_item.rk10_party')}
-
-  %p (#{t('in_preparation')}. #{t('normal_registartion_open_notification')})
+  != render :partial => 'add_to_cart', :locals => {:item => @individual_sponsor}

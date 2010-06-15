@@ -1,0 +1,33 @@
+%div#content
+  %h1
+    RubyKaigi2010 Events
+  %p <strong>Now talks and subevents are listed all together and not up to date. Official time table will come soon. Stay tuned! </strong>
+  - @events.group_by(&:date).each do |date, events_per_date|
+    %h2
+      = l date, :format => :long
+    - events_per_date.reject{|e| ["Break", "Closing", "Opening", "Keynote中継", "LT中継"].include?(e.title)}.each do |event|
+      %ul
+        %li
+          #{event.title}, #{event.presenter_name}
+
+  -#
+    - content_for :head, stylesheet_link_tag('timetables_lagacy')
+    #timetables
+      - @events.group_by(&:date).each do |date, events_per_date|
+        %a{:name => "timetable-#{date.strftime '%m%d'}"}
+          %h1
+            = l date, :format => :long
+          %table.timetable
+            %thead
+              %tr
+                %th.time
+                  &nbsp;
+                - @rooms.each do |room|
+                  %th.room
+                    = room.name
+            %tbody
+              - from, to = events_per_date.map(&:from).min, events_per_date.map(&:to).max
+              - while from.time < to.time
+                - events_per_from = events_per_date.select {|e| e.time.from == from}
+                != render 'time', :from => from, :events_per_from => events_per_from
+                - from += 30.minutes

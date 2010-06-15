@@ -2,6 +2,8 @@
   %h1
     お知らせ
   %ul
+    %li 日本Ruby会議2010に海外から参加するRubyistのための<a href="http://rubykaigi.tdiary.net/20100615.html#p01">メーリングリストを用意しました</a>。海外からRuby会議2010に参加する方はもとより、海外から参加するRubyistに興味のある日本の方も是非ご参加下さい。公開qwikですので<a href="http://qwik.atdot.net/rubykaigi2010overseas/">Webサイトの説明</a>にしたがって参加してください。
+    %li 日本Ruby会議2010では学生割引の制度を今年も用意しました。<a href="http://rubykaigi.tdiary.net/20100614.html#p02">説明に目を通された</a>うえで<a href="https://spreadsheets.google.com/viewform?formkey=dEpJSldhXzV6Skp6d0RxQVdWQS1Odnc6MQ">専用フォームから申請してください</a>。
     %li 日本Ruby会議2010の当日ボランティアスタッフ募集を締め切りました。たくさんのご応募ありがとうございました。</a>
     %li 日本Ruby会議2010の個人スポンサー予定募集枠は終了しました。たくさんのご登録ありがとうございました。なお、一般参加と公式懇親会への参加登録は 2010-06-15 19:00(JST) を予定しています(予定です!)。
   != render :partial => 'shared/headline'
@@ -46,7 +48,7 @@
     %li 日付: 2010 年 8 月 28 日(土)
     %li 開始時刻: 19:00 (JST)
     %li 会場: つくば国際会議場
-    %li 料金: 5,000 JPY (予定)
+    %li 料金: 5,000 JPY
 
   %h2
     基調講演
@@ -59,12 +61,12 @@
       Jeremy Kemper
   %h2
     プレゼンテーション発表
-  %p (登壇予定者の速報です。詳細は追って告知いたします)
+  %p!= link_to 'プレゼンテーション発表と企画の一覧(タイトルは最新のものではありません)', "/2010/#{current_locale}/events"
   %p!= render :partial => 'pages/2010/speakers_list'
 
   %h2
     企画
-  %p (企画責任者の速報です。正式な企画の名前などの詳細は追って告知いたします)
+  %p!= link_to 'プレゼンテーション発表と企画の一覧(タイトルは最新のものではありません)', "/2010/#{current_locale}/events"
   %p!= render :partial => 'pages/2010/subevent_organizers_list'
 
   %h2

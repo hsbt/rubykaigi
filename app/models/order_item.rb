@@ -34,7 +34,7 @@ class OrderItem < ActiveRecord::Base
     product_item.individual_sponsor?
   end
 
-  [:link_label, :link_url, :additional_amount, :attend_party?].each do |sym|
+  [:link_label, :link_url, :additional_amount, :attend_party?, :anonymous?].each do |sym|
     define_method(sym) { individual_sponsor_option.try(sym) }
   end
 end

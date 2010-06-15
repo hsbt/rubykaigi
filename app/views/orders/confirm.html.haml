@@ -5,8 +5,9 @@
   - @order.line_items.each do |item|
     %h2 #{t(item.product_item.label)}
     %ul
-      %li Quantity: #{number_with_delimiter(item.quantity)}
-      %li Amount: #{number_with_delimiter(item.subtotal_price)}
+      %li #{t('amount')}: #{number_with_delimiter(item.price)} JPY
+      %li #{t('quantity')}: #{number_with_delimiter(item.quantity)}
+      %li #{t('subtotal_price')}: #{number_with_delimiter(item.subtotal_price)} JPY
       - if item.individual_sponsor?
         %li Individual Sponsor Link Label: <strong>#{item.link_label.present? ? item.link_label : "(default: name on your account)" }</strong>
         %li Individual Sponsor Link URL: <strong>#{item.link_url.present? ? item.link_url : "(default: website on your account)" }</strong>
@@ -14,11 +15,18 @@
           %li I <strong>#{ item.attend_party? ? "will " : "will not" }</strong> attend official conference party on 28th Aug.
         - else
           %li (#{t('individual_sponsor_party_attend_bonus_is_over')})
+        <br />
+        %p!= link_to 'Edit Individual Sponsor Options', individual_sponsor_option_orders_path
 
-  - if @order.individual_sponsor_included?
-    != link_to 'Edit Individual Sponsor Options', individual_sponsor_option_orders_path
-    <br /><br /><br /><br />
-  - form_tag(url_of_paypal_checkout) do
-    != hidden_field_tag :cmd, @paypal_form.cmd
-    != hidden_field_tag :encrypted, @paypal_form.encrypted
-    != checkout_paypal_button
+
+  %h2 #{t('total_price')}
+  %ul
+    %li #{number_with_delimiter(@order.price)} JPY
+  <br /><br /><br /><br />
+  %p
+    != link_to 'Back to Cart', carts_path
+  %div{:style => 'text-align:right'}
+    - form_tag(url_of_paypal_checkout) do
+      != hidden_field_tag :cmd, @paypal_form.cmd
+      != hidden_field_tag :encrypted, @paypal_form.encrypted
+      != checkout_paypal_button

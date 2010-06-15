@@ -1,10 +1,8 @@
-module WithTwitter
-  def twitter
-    config = configatron.twitter
+config = configatron.twitter
 
-    oauth = Twitter::OAuth.new(config.consumer_key, config.consumer_secret)
-    oauth.authorize_from_access config.access_token, config.access_secret
+raise 'Twitter API settings is not found. Please add the setting referring to config/config.yml.sample.' if config.nil?
 
-    Thread.current[:twitter] ||= Twitter::Base.new(oauth)
-  end
-end
+oauth = Twitter::OAuth.new(config.consumer_key, config.consumer_secret)
+oauth.authorize_from_access config.access_token, config.access_secret
+
+$twitter = Twitter::Base.new(oauth)

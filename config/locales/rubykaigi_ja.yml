@@ -2,12 +2,17 @@ ja:
   ja: '日本語'
   en: 'English'
   rubykaigi: '日本Ruby会議'
+  time:
+    formats:
+      hhmm: "%H:%M"
   rubykaigi2010: '日本Ruby会議 2010'
   sponsors: 'スポンサー'
   ruby_sponsor: 'Rubyスポンサー'
   platinum_sponsor: 'Platinumスポンサー'
   gold_sponsor: 'Goldスポンサー'
   individual_sponsor: '個人スポンサー'
+  attendee: '一般参加'
+  party_attendee: '懇親会'
   link_to_individual_sponsors: '個人スポンサーの一覧'
   coming_soon: '準備中'
   product_item:
@@ -19,6 +24,7 @@ ja:
   dashboard: 'Dashboard'
   account_settings: 'Account Settings'
   time_table: 'タイムテーブル'
+  program: 'プログラム'
   registration: '参加登録'
   order:
     confirm: "注文のご確認"
@@ -49,7 +55,20 @@ ja:
   in_preparation: "準備中"
   delete_this_item: "このアイテムを削除"
   amount: "金額"
+  quantity: "数量"
+  subtotal_price: "小計"
+  total_price: "合計"
   individual_sponsor_detail: '個人スポンサーの仕様についてはこちら'
   normal_registartion_open_notification: '一般参加登録の開始は 2010-06-15(Tue) 19:00 (JST) を予定しています'
   venue: "会場"
-  accommodation: "ホテル"
+  accommodation: "宿泊"
+  notice_max_quantity: "1度に登録できるのは4件までです"
+  should_be_alphabetical: " はアルファベットっぽい文字列でお願いします(/^[a-zA-Z0-9_-]+$/)."
+  student_discount_program: "学割制度"
+  student_discount_program_detail: "学割制度について詳しくはこちら"
+  student_discount_program_entry_form: "学割の申請フォームはこちら"
+  speaker: "スピーカー"
+  when: "日程"
+  abstract: "概要"
+  room: "会場"
+  lang: "言語"

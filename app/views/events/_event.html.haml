@@ -1,0 +1,9 @@
+%div.session
+  %p.title
+    - unless event.break
+      != link_to event.title, event_path(2010, current_locale, event)
+    - else
+      = event.title
+  %p.speaker
+    - event.speakers.each do |speaker|
+      = speaker.full_name || speaker.username

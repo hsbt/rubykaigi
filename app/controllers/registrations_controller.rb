@@ -3,5 +3,7 @@ class RegistrationsController < LocaleBaseController
 
   def index
     @individual_sponsor = ProductItem.find_by_item_code('rk10_individual_sponsor')
+    @kaigi = ProductItem.find_by_item_code("rk10")
+    @party = ProductItem.find_by_item_code("rk10_party")
   end
 end

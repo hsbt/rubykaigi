@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 class Rubyist < ActiveRecord::Base
   extend  ActiveSupport::Memoizable
+  include Redis::Objects
 
   has_many :contributions
+  has_many :tickets
 
   validates_uniqueness_of :username
-  validates_format_of :username, :with => /^[\w-]+$/
+  validates_format_of :username, :with => /^[a-zA-Z0-9_-]+$/, :message => I18n.t('should_be_alphabetical')
   validates_exclusion_of :username, :in => %w(new edit)
 
   validates_format_of :website, :with => URI.regexp(%w(http https)), :allow_blank => true
@@ -15,6 +18,8 @@ class Rubyist < ActiveRecord::Base
   validates_inclusion_of :avatar_type, :in => %w(default twitter gravatar)
 
   attr_protected :twitter_user_id, :identity_url
+
+  value :twitter_account, :marshal => true, :key => 'twitter/users/#{twitter_user_id}'
 
   def to_param
     username
@@ -36,7 +41,7 @@ class Rubyist < ActiveRecord::Base
   end
 
   def attendee?(kaigi_year = RubyKaigi.latest_year)
-    __attendee?(kaigi_year) || individual_sponsor?(kaigi_year)
+    __attendee?(kaigi_year) # || individual_sponsor?(kaigi_year)
   end
 
   def staff?(kaigi_year = RubyKaigi.latest_year)
@@ -51,15 +56,24 @@ class Rubyist < ActiveRecord::Base
     contribution_types_of(kaigi_year).include?('party_attendee')
   end
 
+  def has_ticket?(kaigi_year = RubyKaigi.latest_year)
+    tickets_of(kaigi_year).present?
+  end
+
+  def tickets_of(kaigi_year)
+    tickets.select {|t| t.ruby_kaigi.year == kaigi_year }.sort {|a, b| b.created_at <=> a.created_at }
+  end
+
   def twitter_account
     return nil if twitter_user_id.blank?
     @twitter_account ||= TwitterAccount.new(twitter_user_id)
   end
 
+  # TODO 2010-06-14現在、avator機能は有効化されておらず、そもそも呼び出していない
   def avatar_url(type = avatar_type)
     case type.to_s
     when 'twitter'
-      twitter_account.try(:profile_image_url)
+      twitter_account.nil? ? avatar_url('default') : twitter_account.value.profile_image_url
     when 'gravatar'
       "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}?s=48"
     else
@@ -77,4 +91,5 @@ class Rubyist < ActiveRecord::Base
   def __attendee?(kaigi_year)
     contribution_types_of(kaigi_year).include?('attendee')
   end
+
 end

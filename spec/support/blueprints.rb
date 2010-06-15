@@ -6,6 +6,7 @@ require 'faker'
 Sham.username { Faker::Internet.user_name.gsub('.', '-') }
 Sham.year(:unique => true) {|i| 2010 + i }
 Sham.item_code(:unique => true) {|i| "item_#{i}" }
+Sham.sort_order(:unique => true) {|i| i }
 
 Rubyist.blueprint do
   username
@@ -58,4 +59,24 @@ IndividualSponsorOption.blueprint do
   link_url { "http://www.rubyist.net/~matz/" }
   additional_amount { 0 }
   attend_party { true }
+end
+
+Contribution.blueprint do
+  contribution_type { "attendee" }
+  rubyist { Rubyist.make }
+  ruby_kaigi_id { 5 }
+  order_item { OrderItem.make }
+
+Room.blueprint do
+  name_en { 'Room A' }
+  name_ja { '部屋A' }
+  sort_order
+end
+
+Event.blueprint do
+  title_en { 'Keynote' }
+  title_ja { '基調講演' }
+  abstract_en { 'something about Ruby' }
+  abstract_ja { 'Rubyの話' }
+  room
 end

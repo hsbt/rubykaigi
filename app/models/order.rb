@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
   end
 
   def calculate_price
-    self.price = line_items.inject(0){|r,sum| r += sum.price}
+    self.price = line_items.inject(0){|r,sum| r += sum.subtotal_price}
   end
 
   def individual_sponsor_included?

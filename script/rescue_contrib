@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+contribs = Contribution.find(
+  :all,
+  :conditions => {
+    :ruby_kaigi_id => RubyKaigi._2010.id,
+    :contribution_type => %w[individual_sponsor party_attendee]})
+tickets = Ticket.build_from_contrib(contribs)
+Ticket.transaction do
+  tickets.each(&:save!)
+end

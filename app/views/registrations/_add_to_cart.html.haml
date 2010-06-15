@@ -1,0 +1,12 @@
+%p.add_to_cart{:style => 'text-align:right'}
+  - if item.now_on_sale?
+    != link_to(img_add_to_cart_button, add_item_carts_path(:product_item_code => item.item_code), :method => :post, :class => 'noborder')
+  - else
+    %span{:style => 'font-size: 24px;font-weight:bold'}
+      - if item.sold_out?
+        [Sold Out]
+      - else
+        [In Preparation]
+    - unless item.sold_out?
+      <br />
+      (it will be opening at #{item.open_sale_at.to_s(:db)} JST)

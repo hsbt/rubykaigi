@@ -2,6 +2,7 @@
 !!! Strict
 %html{ :xmlns=>"http://www.w3.org/1999/xhtml", "xml:lang" => "#{current_locale}", :lang => "#{current_locale}" }
   %head
+    != yield :meta_top
     %meta{ "http-equiv" => "Content-Type", :content => "text/html; charset=utf-8" }
     %title= [@title, t(:rubykaigi2010)].compact.join(' - ')
     %link{ :href => "/2010/stylesheets/common.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
@@ -24,7 +25,7 @@
       - if authenticated?
         %div#account
           %div
-            %p Welcome, #{user.username} 
+            %p Welcome, #{user.username}
             %ul
               %li!= link_to 'Dashboard', dashboard_path
               %li!= link_to 'Account Settings', edit_account_path
@@ -61,10 +62,10 @@
                 %li
                   %a{ :href => "/2010/#{current_locale}/Sponsors#individuals" }
                     \#{t(:individual_sponsor)}
+            %li
+              %a{ :href => "/2010/#{current_locale}/Team" }
+                #{t(:team)}
             /
-              %li
-                %a{ :href => "/2010/#{current_locale}/Team" }
-                  #{t(:team)}
               %li
                 %a{ :href => "#" }
                   #{t(:goodies)}
@@ -89,9 +90,8 @@
                     \#{t(:rubykaigi)} 2006
 
         %li.current
-          %a{ :href => "#" }
-            #{t(:time_table)}(#{t(:coming_soon)})
-          /
+          != link_to t(:program), "/2010/#{current_locale}/events"
+          -#
             %ul
               %li
                 %a{ :href => "#" }

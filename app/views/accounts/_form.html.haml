@@ -3,12 +3,14 @@
 %dl
   %dt!= form.label :username
   %dd!= form.text_field :username
-
+  username will use for permalink like: #{'http://rubykaigi.org/rubyists/#{username}'}<br />
+  <br />
   %dt!= form.label :full_name
   %dd!= form.text_field :full_name
-
+  <br />
   %dt!= form.label :email
   %dd!= form.text_field :email
-
+  <br />
   %dt!= form.label :website
   %dd!= form.text_field :website
+  <br />

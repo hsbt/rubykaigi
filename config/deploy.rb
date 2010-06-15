@@ -91,6 +91,11 @@ namespace :god do
   task :restart do
     run("god restart delayed_job")
   end
+
+  task :reboot do
+    terminate
+    start
+  end
 end
 
 
@@ -108,4 +113,4 @@ notification.irc do |irc|
 end
 
 after 'deploy:finalize_update', 'bundler:bundle'
-after 'deploy:migrations', 'god:restart'
+after 'deploy:migrations', 'god:reboot'

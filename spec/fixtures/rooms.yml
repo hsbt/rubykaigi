@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name_en: MyString
+  name_ja: MyString
+  floor_en: MyString
+  floor_ja: MyString
+  sort_order: 1
+
+two:
+  name_en: MyString
+  name_ja: MyString
+  floor_en: MyString
+  floor_ja: MyString
+  sort_order: 1

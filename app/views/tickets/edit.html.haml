@@ -1,0 +1,25 @@
+#content
+  - form_for @ticket do |f|
+    != f.error_messages
+    %h1 RubyKaigi #{@ticket.ruby_kaigi.year}, #{t(@ticket.ticket_type)}
+
+    %h2 Ticket Code
+    %p #{@ticket.ticket_code}
+
+    %h2 Ticket Type
+    %p #{t(@ticket.ticket_type)}
+
+    %h2 Your Name
+    %p
+      != f.text_field :name
+
+    %h2 Your Email
+    %p
+      != f.text_field :email
+
+    != f.submit 'Update'
+
+  <br />
+  <br />
+  <br />
+  %p!= link_to 'Back to Ticket', ticket_path(@ticket)

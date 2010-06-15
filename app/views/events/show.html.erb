@@ -1,0 +1,38 @@
+<div id='content'>
+  <h1><%=h @event.title %></h1>
+
+  <h2><%= t(:speaker) %></h2>
+
+  <p>
+  <%- @event.speakers.each do |speaker| -%>
+    <%= link_to speaker.username, speaker %><br>
+  <% end -%>
+  </p>
+
+  <h2><%= t(:abstract) %></h2>
+
+  <p>
+  <%=h @event.abstract %>
+  </p>
+
+  <h2><%= t(:when) %></h2>
+
+  <p>
+  <%= l @event.date %> <%= l @event.from, :format => :hhmm %> - <%= l @event.to, :format => :hhmm %>
+  </p>
+
+  <h2><%= t(:room) %></h2>
+
+  <p>
+  <%= @event.room.name %>
+  </p>
+
+  <h2><%= t(:lang) %></h2>
+
+  <p>
+  <%=h @event.lang %>
+  </p>
+
+  <%# link_to 'Edit', edit_event_path(@event) %>
+  <%= link_to 'Back', events_path(2010, current_locale) %>
+</div>
