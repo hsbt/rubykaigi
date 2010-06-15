@@ -23,7 +23,7 @@
         %li [Staff]
       - if @rubyist.attendee?(2010)
         %li [Attendee]
-      - if user.party_attendee?(2010)
+      - if @rubyist.party_attendee?(2010)
         %li [Official Conference Party Attendee]
     - else
       %li (Nothing)
