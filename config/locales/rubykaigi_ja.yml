@@ -72,3 +72,6 @@ ja:
   abstract: "概要"
   room: "会場"
   lang: "言語"
+  out_of_stock: "売り切れ"
+  running_out_of_stock: "残席わずか"
+  in_stock: "在庫あり"

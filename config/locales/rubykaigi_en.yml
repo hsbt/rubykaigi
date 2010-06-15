@@ -72,3 +72,6 @@ en:
   abstract: "Abstract"
   room: "Room"
   lang: "Lang"
+  out_of_stock: "Out of Stock"
+  running_out_of_stock: "Running Out of Stock"
+  in_stock: "In Stock"
