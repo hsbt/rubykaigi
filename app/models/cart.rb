@@ -45,4 +45,8 @@ class Cart
   def individual_sponsor
     @items.detect {|item| item.individual_sponsor? }
   end
+
+  def all_item_in_stock?
+    @items.all? {|item| item.in_stock? }
+  end
 end

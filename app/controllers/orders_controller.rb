@@ -5,6 +5,10 @@ class OrdersController < ApplicationController
 
   def create
     cart = current_cart
+    unless cart.all_item_in_stock?
+      flash[:error] = "Your cart is including out of stock item(s). Remove item(s) from your cart and retry."
+      redirect_to(carts_path) and return
+    end
     @order = Order.new(:rubyist => user, :ruby_kaigi => RubyKaigi.latest)
     @order.add_line_item_from_cart(cart)
     if @order.individual_sponsor_included? && authenticated? && user.individual_sponsor?

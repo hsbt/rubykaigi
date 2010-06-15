@@ -53,5 +53,9 @@ class CartItem
     @product_item.individual_sponsor?
   end
 
+  def in_stock?
+    0 < ProductItem.find(@product_item.id).try(:stock)
+  end
+
   alias :attend_party? :attend_party
 end
