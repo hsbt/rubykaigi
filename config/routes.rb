@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :events, :path_prefix => ":year/:locale", :requirements => {:year => /2\d{3}/, :locale => /en|ja/}
 
   map.signin "/signin", :controller => 'sessions', :action => 'new'
+  map.my_tickets "my_tickets", :controller => 'tickets', :action => 'index'
 
   map.resource :sessions, :collection => {:unauthenticated => :get}
   map.resource :account
